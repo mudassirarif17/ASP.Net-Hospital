@@ -1,20 +1,12 @@
-﻿@model IEnumerable<project.Models.Department>
+﻿@model IEnumerable<project.Models.Appointment>
 
 @{
     Layout = null;
 }
 
-@using Microsoft.AspNetCore.Identity
-@using project.Areas.Identity.Data
-
-@inject SignInManager<ApplicationUser> SignInManager
-@inject UserManager<ApplicationUser> UserManager
 
 
-@{
-    ViewData["Title"] = "Admin Dashboard";
-    Layout = null;
-}
+
 
 <!DOCTYPE html>
 <html lang="en">
@@ -63,16 +55,6 @@
 
         <div class="main-panel">
 
-            @{
-                if (TempData["success"] != null)
-                {
-                    <div class="alert alert-success alert-dismissible fade show" role="alert">
-                        <strong>Success : </strong> @TempData["success"]
-                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-                    </div>
-                }
-            }
-
             <div class="main-header">
                 <div class="main-header-logo">
                     <!-- Logo Header -->
@@ -102,18 +84,30 @@
                 <!-- End Navbar -->
             </div>
 
-            <div class="container w-75 ">
+            <div class="container w-100 ">
                 <div class="page-inner">
-                <h4 class="text-center mt-3">All Department</h4>
-                <hr />
-                    <table class="table table-bordered table-striped">
+                    <h4 class="text-center mt-3">All Pending Appointments</h4>
+                    <hr />
+                    <table class="table">
                         <thead>
                             <tr>
                                 <th>
-                                    @Html.DisplayNameFor(model => model.DepartmentId)
+                                    App ID
                                 </th>
                                 <th>
-                                    @Html.DisplayNameFor(model => model.Name)
+                                    @Html.DisplayNameFor(model => model.patientName)
+                                </th>
+                                <th>
+                                    @Html.DisplayNameFor(model => model.status)
+                                </th>
+                                <th>
+                                    @Html.DisplayNameFor(model => model.User)
+                                </th>
+                                <th>
+                                    @Html.DisplayNameFor(model => model.Doctor)
+                                </th>
+                                <th>
+                                    @Html.DisplayNameFor(model => model.AppointmentDate)
                                 </th>
                                 <th>Actions</th>
                             </tr>
@@ -123,22 +117,34 @@
                             {
                                 <tr>
                                     <td>
-                                        @Html.DisplayFor(modelItem => item.DepartmentId)
+                                        @Html.DisplayFor(modelItem => item.AppointmentId)
                                     </td>
                                     <td>
-                                        @Html.DisplayFor(modelItem => item.Name)
+                                        @Html.DisplayFor(modelItem => item.patientName)
                                     </td>
                                     <td>
-                                        <a asp-action="Edit" asp-route-id="@item.DepartmentId">Edit</a> |
-                                        <a asp-action="Details" asp-route-id="@item.DepartmentId">Details</a> |
-                                        <a asp-action="dlt_department" asp-route-id="@item.DepartmentId">Delete</a>
+                                        @Html.DisplayFor(modelItem => item.status)
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.User.FirstName)
+                                        @Html.DisplayFor(modelItem => item.User.LastName)
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.Doctor.Name)
+                                    </td>
+                                    <td>
+                                        @Html.DisplayFor(modelItem => item.AppointmentDate)
+                                    </td>
+                                    <td>
+                                        <a class="btn btn-sm btn-primary" asp-action="app_approved" asp-route-id="@item.AppointmentId">Approved</a> |
+                                        <a class="btn btn-sm btn-primary" asp-action="app_canceled" asp-route-id="@item.AppointmentId">Canceled</a>
                                     </td>
                                 </tr>
                             }
                         </tbody>
                     </table>
 
-                 </div>
+                </div>
             </div>
 
             <footer class="footer">
@@ -371,4 +377,3 @@
         await Html.RenderPartialAsync("_ValidationScriptsPartial");
     }
 }
-

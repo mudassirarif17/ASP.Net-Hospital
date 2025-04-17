@@ -8,6 +8,8 @@ namespace project.Models
     {
         [Key]
         public int AppointmentId { get; set; }
+        public string patientName { get; set; }
+        public string status { get; set; }
         [ForeignKey("User") ] 
         public string UserId { get; set; }
         public ApplicationUser User { get; set; }
